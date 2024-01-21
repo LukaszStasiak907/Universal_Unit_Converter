@@ -1,0 +1,14 @@
+{
+    "PA_BAR": {"multiplier": 1e-5},
+    "PA_AT": {"multiplier": 1.01972e-5},
+    "PA_PSI": {"multiplier": 0.000145038},
+    "BAR_PA": {"multiplier": 100000},
+    "BAR_AT": {"multiplier": 1.01972},
+    "BAR_PSI": {"multiplier": 14.5038},
+    "AT_PA": {"multiplier": 98066.5},
+    "AT_BAR": {"multiplier": 0.980665},
+    "AT_PSI": {"multiplier": 14.2233},
+    "PSI_PA": {"multiplier": 6894.76},
+    "PSI_BAR": {"multiplier": 0.0689476},
+    "PSI_AT": {"multiplier": 0.07030696}
+}

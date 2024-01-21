@@ -1,0 +1,8 @@
+{
+    "N_KGF": {"multiplier": 0.101971621},
+    "N_LBF": {"multiplier": 0.224808943},
+    "KGF_N": {"multiplier": 9.80665},
+    "KGF_LBF": {"multiplier": 2.20462262},
+    "LBF_N": {"multiplier": 4.44822},
+    "LBF_KGF": {"multiplier": 0.45359237}
+}
