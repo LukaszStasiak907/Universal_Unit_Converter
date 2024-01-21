@@ -8,14 +8,19 @@ URL_API = "https://api.exchangerate-api.com/v4/latest/USD"
 FILE_NAME = "exchange_rates.json"
 
 
-def fetch_currencies():
+def fetch_currencies(url_api, file_name):
     try:
-        response = requests.get(URL_API)
+        response = requests.get(url_api)
         response.raise_for_status()
         data = response.json()
-        data['fetch_date'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with open(FILE_NAME, 'w') as f:
-            json.dump(data, f)
+        selected_data = {
+            'fetch_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'base': data.get('base'),
+            'rates': data.get('rates')
+        }
+
+        with open(file_name, 'w') as f:
+            json.dump(selected_data, f)
         print("Currency rates downloaded and saved.")
 
     except requests.RequestException as e:
@@ -25,7 +30,7 @@ def fetch_currencies():
 def currency_conversion():
     if not os.path.exists(FILE_NAME):
         print("No local exchange rate data. Downloading...")
-        fetch_currencies()
+        fetch_currencies(URL_API, FILE_NAME)
 
     with open(FILE_NAME, 'r') as f:
         rates = json.load(f)
