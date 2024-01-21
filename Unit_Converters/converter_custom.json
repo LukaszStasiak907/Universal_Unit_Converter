@@ -1,0 +1,14 @@
+{
+    "GUCIO_PIES": {
+        "multiplier": 2.0
+    },
+    "PIES_GUCIO": {
+        "multiplier": 0.5
+    },
+    "GABRIEL_M": {
+        "multiplier": 3.0
+    },
+    "M_GABRIEL": {
+        "multiplier": 0.3333333333333333
+    }
+}
