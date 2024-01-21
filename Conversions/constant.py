@@ -8,19 +8,32 @@ def calculate(value, source_unit, target_unit, conversion_type):
     target_unit = target_unit.upper()
     key = f"{source_unit}_{target_unit}"
 
-    if key in conversion_factors:
-        conversion_factor = conversion_factors[key]
-        if conversion_type == "temperature":
+    if conversion_type == "temperature":
+        if key in conversion_factors:
+            conversion_factor = conversion_factors[key]
             value += conversion_factor.get("pre_offset", 0)
             value *= conversion_factor.get("multiplier", 1)
             value += conversion_factor.get("post_offset", 0)
+            return value
         else:
-            value *= conversion_factor["multiplier"]
-
-        return value
+            print(f"No conversion rate for: {source_unit} to {target_unit}")
+            return None
     else:
-        print(f"No conversion rate for:{source_unit} to {target_unit}")
-        return None
+        source_key = f"{source_unit}_M"
+        if source_key in conversion_factors:
+            source_conversion_factor = conversion_factors[source_key]["multiplier"]
+            value_in_meters = value * source_conversion_factor
+        else:
+            print(f"No conversion rate from {source_unit} to meters")
+            return None
+        target_key = f"M_{target_unit}"
+        if target_key in conversion_factors:
+            target_conversion_factor = conversion_factors[target_key]["multiplier"]
+            converted_value = value_in_meters * target_conversion_factor
+            return converted_value
+        else:
+            print(f"No conversion rate from meters to {target_unit}")
+            return None
 
 
 def choose_conversion():
