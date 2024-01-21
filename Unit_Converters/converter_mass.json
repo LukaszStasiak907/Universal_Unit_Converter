@@ -1,0 +1,22 @@
+{
+    "KG_G": {"multiplier": 1000},
+    "KG_T": {"multiplier": 0.001},
+    "KG_LB": {"multiplier": 2.20462},
+    "KG_OZ": {"multiplier": 35.274},
+    "G_KG": {"multiplier": 0.001},
+    "G_T": {"multiplier": 1e-6},
+    "G_LB": {"multiplier": 0.00220462},
+    "G_OZ": {"multiplier": 0.035274},
+    "T_KG": {"multiplier": 1000},
+    "T_G": {"multiplier": 1e6},
+    "T_LB": {"multiplier": 2204.62},
+    "T_OZ": {"multiplier": 35274},
+    "LB_KG": {"multiplier": 0.453592},
+    "LB_G": {"multiplier": 453.592},
+    "LB_T": {"multiplier": 0.000453592},
+    "LB_OZ": {"multiplier": 16},
+    "OZ_KG": {"multiplier": 0.0283495},
+    "OZ_G": {"multiplier": 28.3495},
+    "OZ_T": {"multiplier": 2.83495e-5},
+    "OZ_LB": {"multiplier": 0.0625}
+}

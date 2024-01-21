@@ -37,7 +37,12 @@ def choose_conversion():
     print("Available units:", ", ".join(units))
     source_unit = input("Enter source unit: ").lower()
     target_unit = input("Enter target unit: ").lower()
+
     value = utils.validate_number(input("Enter the value to be converted: "))
+
+    if source_unit == target_unit:
+        print(f"{value} {source_unit} to {value:.2f} {target_unit}")
+        return
 
     if value is None:
         return
