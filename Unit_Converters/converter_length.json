@@ -1,0 +1,4 @@
+{
+    "M_KM": {"multiplier": 0.001},
+    "KM_M": {"multiplier": 1000.0}
+}
