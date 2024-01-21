@@ -19,7 +19,6 @@ def main():
         if choice == "1":
             constant.choose_conversion()
         elif choice == "2":
-            currency.fetch_currencies()
             currency.currency_conversion()
         elif choice == "3":
             utils.add_new_unit()
