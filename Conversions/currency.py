@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 import requests
 import tkinter as tk
-from utils.utils import clear_window, main_menu, validate_number
+from Converter_Utils.utils import clear_window, main_menu, validate_number
 
 URL_API = "https://api.exchangerate-api.com/v4/latest/USD"
 FILE_NAME = "exchange_rates.json"

@@ -4,5 +4,11 @@
     },
     "UNIT2_UNIT1": {
         "multiplier": 0.5
+    },
+    "MY_UNIT_METER": {
+        "multiplier": 2.0
+    },
+    "METER_MY_UNIT": {
+        "multiplier": 0.5
     }
 }

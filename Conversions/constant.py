@@ -1,7 +1,7 @@
 import os
 import json
 import tkinter as tk
-from utils.utils import clear_window, create_dropdown_menu, main_menu, validate_number
+from Converter_Utils.utils import clear_window, create_dropdown_menu, main_menu, validate_number
 
 
 def get_conversion_types():

@@ -1,7 +1,7 @@
 import tkinter as tk
 import Conversions.constant as constant
 import Conversions.currency as currency
-from utils.utils import add_new_unit, clear_window
+from Converter_Utils.utils import add_new_unit, clear_window
 
 
 def main_menu(window):
