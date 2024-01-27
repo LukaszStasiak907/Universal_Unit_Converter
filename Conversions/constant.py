@@ -6,21 +6,36 @@ def calculate(value, source_unit, target_unit, conversion_type):
     conversion_factors = utils.load_conversion_factors(conversion_type)
     source_unit = source_unit.upper()
     target_unit = target_unit.upper()
-    key = f"{source_unit}_{target_unit}"
 
-    if key in conversion_factors:
-        conversion_factor = conversion_factors[key]
-        if conversion_type == "temperature":
+    if conversion_type != "temperature":
+        # Konwersja na jednostkę bazową
+        if source_unit in conversion_factors:
+            value /= conversion_factors[source_unit]["multiplier"]
+        else:
+            print(f"No conversion rate from {source_unit} to base unit.")
+            return None
+
+        # Konwersja z jednostki bazowej na docelową
+        if target_unit in conversion_factors:
+            value *= conversion_factors[target_unit]["multiplier"]
+        else:
+            print(f"No conversion rate from base unit to {target_unit}.")
+            return None
+    else:
+        # Dla temperatury użyj istniejącego systemu
+        key = f"{source_unit}_{target_unit}"
+        if key in conversion_factors:
+            conversion_factor = conversion_factors[key]
             value += conversion_factor.get("pre_offset", 0)
             value *= conversion_factor.get("multiplier", 1)
             value += conversion_factor.get("post_offset", 0)
         else:
-            value *= conversion_factor["multiplier"]
+            print(f"No conversion rate for: {source_unit} to {target_unit}")
+            return None
 
-        return value
-    else:
-        print(f"No conversion rate for:{source_unit} to {target_unit}")
-        return None
+    return value
+
+
 
 
 def choose_conversion():
