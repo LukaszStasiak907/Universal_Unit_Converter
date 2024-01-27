@@ -1,59 +1,76 @@
+import tkinter as tk
+from tkinter import ttk
 import requests
 import json
-import os
-from datetime import datetime
-from utils import utils
+from utils import validate_number
 
+# Adres URL API do pobierania kursów walut
 URL_API = "https://api.exchangerate-api.com/v4/latest/USD"
 FILE_NAME = "exchange_rates.json"
 
-
-def fetch_currencies(url_api, file_name):
-    selected_currencies = ["USD", "EUR", "CHF", "GBP", "CNY", "JPY", "PLN", "CZK"]
+def fetch_currencies():
     try:
-        response = requests.get(url_api)
+        response = requests.get(URL_API)
         response.raise_for_status()
         data = response.json()
-
-        # Filtrujemy tylko wybrane waluty
-        filtered_rates = {currency: data['rates'].get(currency) for currency in selected_currencies}
-
-        selected_data = {
-            'fetch_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'base': data.get('base'),
-            'rates': filtered_rates
-        }
-
-        with open(file_name, 'w') as f:
-            json.dump(selected_data, f)
-        return selected_data
-
+        with open(FILE_NAME, 'w') as f:
+            json.dump(data, f)
+        return data['rates']
     except requests.RequestException as e:
-        print(f"Error during downloading currency rates: {e}")
-        if os.path.exists(file_name):
-            with open(file_name, 'r') as f:
-                return json.load(f)
-        return None
+        print(f"Błąd podczas pobierania kursów walut: {e}")
+        try:
+            with open(FILE_NAME, 'r') as f:
+                return json.load(f)['rates']
+        except (FileNotFoundError, json.JSONDecodeError):
+            return None
 
+def calculate_currency(amount, source_currency, target_currency, rates):
+    if source_currency in rates and target_currency in rates:
+        conversion_factor = rates[target_currency] / rates[source_currency]
+        return amount * conversion_factor
+    return None
 
-def currency_conversion():
-    rates = fetch_currencies(URL_API, FILE_NAME)
+def get_currency_frame(root):
+    frame = ttk.Frame(root)
 
-    if rates is None:
-        print("Unable to fetch new data and no local data available.")
-        return
+    # Pobranie aktualnych kursów walut
+    rates = fetch_currencies()
+    if not rates:
+        ttk.Label(frame, text="Błąd: Nie udało się pobrać kursów walut.").pack()
+        return frame
 
-    source_currency = input("Enter your source currency (e.g. USD): ").upper()
-    target_currency = input("Enter the target currency (e.g. EUR): ").upper()
-    amount = utils.validate_number(input("Enter the amount to be converted: "))
+    currencies = list(rates.keys())
 
-    if amount is None:
-        return
+    # Tworzenie widgetów
+    ttk.Label(frame, text="Kwota:").pack()
+    amount_entry = ttk.Entry(frame)
+    amount_entry.pack()
 
-    if source_currency in rates['rates'] and target_currency in rates['rates']:
-        conversion_factor = rates['rates'][target_currency] / rates['rates'][source_currency]
-        result = amount * conversion_factor
-        print(f"The data is from this date: {rates['fetch_date']}")
-        print(f"{amount} {source_currency} = {result:.2f} {target_currency}")
-    else:
-        print("Unknown currency.")
+    ttk.Label(frame, text="Waluta źródłowa:").pack()
+    source_currency_combobox = ttk.Combobox(frame, values=currencies)
+    source_currency_combobox.pack()
+
+    ttk.Label(frame, text="Waluta docelowa:").pack()
+    target_currency_combobox = ttk.Combobox(frame, values=currencies)
+    target_currency_combobox.pack()
+
+    result_label = ttk.Label(frame)
+    result_label.pack()
+
+    def on_calculate():
+        try:
+            amount = validate_number(amount_entry.get())
+            source_currency = source_currency_combobox.get()
+            target_currency = target_currency_combobox.get()
+
+            result = calculate_currency(amount, source_currency, target_currency, rates)
+            if result is not None:
+                result_label.config(text=f"Wynik: {result:.2f} {target_currency}")
+            else:
+                result_label.config(text="Nie można przeprowadzić konwersji.")
+        except Exception as e:
+            result_label.config(text=f"Błąd: {str(e)}")
+
+    ttk.Button(frame, text="Oblicz", command=on_calculate).pack()
+
+    return frame
