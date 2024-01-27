@@ -3,10 +3,16 @@ import json
 
 def calculate(value, source_unit, target_unit, conversion_type):
     conversion_factors = utils.load_conversion_factors(conversion_type)
+    custom_conversion_factors = utils.load_conversion_factors("custom")  # Załaduj niestandardowe współczynniki konwersji
     source_unit = source_unit.upper()
     target_unit = target_unit.upper()
 
-    if conversion_type == "temperature":
+    custom_key = f"{source_unit}_{target_unit}"
+
+    if custom_key in custom_conversion_factors:
+        # Użyj niestandardowej konwersji, jeśli dostępna
+        value *= custom_conversion_factors[custom_key]["multiplier"]
+    elif conversion_type == "temperature":
         # Konwersja na Kelwiny, jeśli potrzebna
         if source_unit != "K":
             key = f"{source_unit}_K"
