@@ -8,7 +8,18 @@ from utils.utils import validate_number, clear_window, main_menu
 URL_API = "https://api.exchangerate-api.com/v4/latest/USD"
 FILE_NAME = "exchange_rates.json"
 
+
 def currency_conversion(window):
+    """
+    Sets up the GUI for currency conversion.
+
+    This function clears the current window, fetches the latest currency rates, and sets up the interface
+    for currency conversion, including dropdown menus for selecting source and target currencies and
+    an entry field for the amount to be converted.
+
+    Parameters:
+    window (tk.Tk): The tkinter window where the currency conversion GUI will be displayed.
+    """
     clear_window(window)
     for i in range(6):
         window.grid_rowconfigure(i, weight=1)
@@ -17,7 +28,8 @@ def currency_conversion(window):
     rates = fetch_currencies(URL_API, FILE_NAME)
 
     if rates is None:
-        tk.Label(window, text="Unable to fetch new data and no local data available.").grid(row=0, column=0, sticky="nsew")
+        tk.Label(window,
+                 text="Unable to fetch new data and no local data available.").grid(row=0, column=0, sticky="nsew")
         return
 
     currencies = list(rates['rates'].keys())
@@ -36,7 +48,13 @@ def currency_conversion(window):
     amount_entry = tk.Entry(window)
     amount_entry.grid(row=6, column=0, sticky="ew")
 
-    convert_button = tk.Button(window, text="Convert", command=lambda: perform_currency_conversion(window, rates, source_currency_var.get(), target_currency_var.get(), amount_entry.get()))
+    convert_button = tk.Button(window,
+                               text="Convert",
+                               command=lambda: perform_currency_conversion(window,
+                                                                           rates,
+                                                                           source_currency_var.get(),
+                                                                           target_currency_var.get(),
+                                                                           amount_entry.get()))
     convert_button.grid(row=7, column=0, sticky="nsew")
 
     back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
@@ -44,6 +62,16 @@ def currency_conversion(window):
 
 
 def fetch_currencies(url_api, file_name):
+    """Fetches currency rates from an API or loads them from a local file if the API call fails.
+
+    Parameters:
+    url_api (str): The API URL to fetch the currency rates.
+    file_name (str): The name of the local file to load the rates from if the API call fails.
+
+    Returns:
+    dict: A dictionary containing the fetched or loaded currency rates and metadata.
+    """
+
     selected_currencies = ["USD", "EUR", "CHF", "GBP", "CNY", "JPY", "PLN", "CZK"]
     try:
         response = requests.get(url_api)
@@ -71,8 +99,21 @@ def fetch_currencies(url_api, file_name):
 
 
 def perform_currency_conversion(window, rates, source_currency, target_currency, amount_str):
+    """
+    Performs the currency conversion and displays the result.
+
+    This function takes the input amount, source and target currencies, calculates the conversion
+    based on the current rates, and displays the result. It also handles the case of an invalid input amount
+    or unknown currencies.
+
+    Parameters:
+    window (tk.Tk): The tkinter window where the results will be displayed.
+    rates (dict): A dictionary containing the current currency rates.
+    source_currency (str): The code of the source currency.
+    target_currency (str): The code of the target currency.
+    amount_str (str): The string representation of the amount to be converted.
+    """
     clear_window(window)
-    # Konfiguracja wagi wierszy i kolumn dla responsywności
     for i in range(5):
         window.grid_rowconfigure(i, weight=1)
         window.grid_columnconfigure(0, weight=1)
