@@ -1,8 +1,6 @@
 {
-    "C_F": {"pre_offset": 0, "multiplier": 1.8, "post_offset": 32},
-    "F_C": {"pre_offset": -32, "multiplier": 0.5555555556, "post_offset": 0},
-    "C_K": {"pre_offset": 0, "multiplier": 1, "post_offset": 273.15},
-    "K_C": {"pre_offset": 0, "multiplier": 1, "post_offset": -273.15},
-    "F_K": {"pre_offset": -32, "multiplier": 0.5555555556, "post_offset": 273.15},
-    "K_F": {"pre_offset": 0, "multiplier": 1.8, "post_offset": -459.67}
+    "C_K": {"multiplier": 1, "offset": 273.15},
+    "K_C": {"multiplier": 1, "offset": -273.15},
+    "F_K": {"multiplier": 0.5555555556, "offset": -32, "to_kelvin_offset": 273.15},
+    "K_F": {"multiplier": 1.8, "offset": -459.67}
 }

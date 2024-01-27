@@ -7,7 +7,30 @@ def calculate(value, source_unit, target_unit, conversion_type):
     source_unit = source_unit.upper()
     target_unit = target_unit.upper()
 
-    if conversion_type != "temperature":
+    if conversion_type == "temperature":
+        # Konwersja na Kelwiny, jeśli potrzebna
+        if source_unit != "K":
+            key = f"{source_unit}_K"
+            if key in conversion_factors:
+                factor = conversion_factors[key]
+                value = (value + factor["offset"]) * factor["multiplier"]
+                if "to_kelvin_offset" in factor:
+                    value += factor["to_kelvin_offset"]
+            else:
+                print(f"No conversion rate for: {source_unit} to K")
+                return None
+
+        # Konwersja z Kelwinów na jednostkę docelową
+        if target_unit != "K":
+            key = f"K_{target_unit}"
+            if key in conversion_factors:
+                factor = conversion_factors[key]
+                value = value * factor["multiplier"] + factor["offset"]
+            else:
+                print(f"No conversion rate for: K to {target_unit}")
+                return None
+    else:
+        # Dla innych typów konwersji (np. długość)
         # Konwersja na jednostkę bazową
         if source_unit in conversion_factors:
             value /= conversion_factors[source_unit]["multiplier"]
@@ -21,19 +44,9 @@ def calculate(value, source_unit, target_unit, conversion_type):
         else:
             print(f"No conversion rate from base unit to {target_unit}.")
             return None
-    else:
-        # Dla temperatury użyj istniejącego systemu
-        key = f"{source_unit}_{target_unit}"
-        if key in conversion_factors:
-            conversion_factor = conversion_factors[key]
-            value += conversion_factor.get("pre_offset", 0)
-            value *= conversion_factor.get("multiplier", 1)
-            value += conversion_factor.get("post_offset", 0)
-        else:
-            print(f"No conversion rate for: {source_unit} to {target_unit}")
-            return None
 
     return value
+
 
 
 
@@ -49,9 +62,16 @@ def choose_conversion():
         print(f"No conversion file found for '{conversion_type}'.")
         return
 
-    print("Available units:", ", ".join(units))
-    source_unit = input("Enter source unit: ").lower()
-    target_unit = input("Enter target unit: ").lower()
+    if conversion_type == "temperature":
+        # Wyświetl tylko symbole jednostek dla temperatury
+        display_units = {"C", "K", "F"}
+    else:
+        # Dla innych konwersji, wyświetl dostępne jednostki
+        display_units = set(unit.split("_")[0] for unit in units)
+
+    print("Available units:", ", ".join(display_units))
+    source_unit = input("Enter source unit: ").upper()
+    target_unit = input("Enter target unit: ").upper()
 
     value = utils.validate_number(input("Enter the value to be converted: "))
 
@@ -63,4 +83,6 @@ def choose_conversion():
         return
 
     outcome = calculate(value, source_unit, target_unit, conversion_type)
-    print(f"{value} {source_unit} to {outcome:.2f} {target_unit}")
+    if outcome is not None:
+        print(f"{value} {source_unit} to {outcome:.2f} {target_unit}")
+
