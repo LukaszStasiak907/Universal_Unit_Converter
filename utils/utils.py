@@ -1,12 +1,17 @@
 import tkinter as tk
 import json
-import os
+
 
 def validate_number(input_str, window, back_function):
     try:
-        return float(input_str)
+        value = float(input_str)
+        if value < 0:
+            tk.Label(window, text="Number must be non-negative.").grid(row=0, column=0, sticky="nsew")
+            tk.Button(window, text="Back", command=back_function).grid(row=1, column=0, sticky="ew")
+            return None
+        return value
     except ValueError:
-        tk.Label(window, text="This is not a valid number.").grid(row=0, column=0, sticky="w")
+        tk.Label(window, text="This is not a valid number.").grid(row=0, column=0, sticky="nsew")
         tk.Button(window, text="Back", command=back_function).grid(row=1, column=0, sticky="ew")
         return None
 

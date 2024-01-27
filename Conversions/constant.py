@@ -48,7 +48,7 @@ def conversion_screen(window, conversion_type):
     source_unit_var = create_dropdown_menu(window, "Select source unit:", list(units), 2, 3)
     target_unit_var = create_dropdown_menu(window, "Select target unit:", list(units), 4, 5)
 
-    tk.Label(window, text="Enter the value to be converted:").grid(row=6, column=0, sticky="w")
+    tk.Label(window, text="Enter the value to be converted:").grid(row=6, column=0, sticky="nsew")
     value_entry = tk.Entry(window)
     value_entry.grid(row=7, column=0, sticky="ew")
 

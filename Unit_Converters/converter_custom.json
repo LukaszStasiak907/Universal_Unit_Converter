@@ -1,68 +1,8 @@
 {
-    "GUCIO_PIES": {
+    "UNIT1_UNIT2": {
         "multiplier": 2.0
     },
-    "PIES_GUCIO": {
+    "UNIT2_UNIT1": {
         "multiplier": 0.5
-    },
-    "GABRIEL_M": {
-        "multiplier": 3.0
-    },
-    "M_GABRIEL": {
-        "multiplier": 0.3333333333333333
-    },
-    "GUCIO2_PIES": {
-        "multiplier": 4.0
-    },
-    "PIES_GUCIO2": {
-        "multiplier": 0.25
-    },
-    "TURBO_NORMAL": {
-        "multiplier": 2.0
-    },
-    "NORMAL_TURBO": {
-        "multiplier": 0.5
-    },
-    "TURBO2_TURBO": {
-        "multiplier": 2.0
-    },
-    "TURBO_TURBO2": {
-        "multiplier": 0.5
-    },
-    "UNIT3_UNIT5": {
-        "multiplier": 2.0
-    },
-    "UNIT5_UNIT3": {
-        "multiplier": 0.5
-    },
-    "UNIT30_UNIT3": {
-        "multiplier": 2.0
-    },
-    "UNIT3_UNIT30": {
-        "multiplier": 0.5
-    },
-    "UNIT12_UNIT3": {
-        "multiplier": 3.0
-    },
-    "UNIT3_UNIT12": {
-        "multiplier": 0.3333333333333333
-    },
-    "HELLO1_HELLO2E": {
-        "multiplier": 20.0
-    },
-    "HELLO2E_HELLO1": {
-        "multiplier": 0.05
-    },
-    "UNIT3_UNIT8": {
-        "multiplier": 2.0
-    },
-    "UNIT8_UNIT3": {
-        "multiplier": 0.5
-    },
-    "EREWR_REWRWER": {
-        "multiplier": 21.0
-    },
-    "REWRWER_EREWR": {
-        "multiplier": 0.047619047619047616
     }
 }
