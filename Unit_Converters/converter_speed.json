@@ -1,14 +1,6 @@
 {
-    "KMH_MPH": {"multiplier": 0.621371},
-    "KMH_MS": {"multiplier": 0.277778},
-    "KMH_KNOTS": {"multiplier": 0.539957},
-    "MPH_KMH": {"multiplier": 1.60934},
-    "MPH_MS": {"multiplier": 0.44704},
-    "MPH_KNOTS": {"multiplier": 0.868976},
-    "MS_KMH": {"multiplier": 3.6},
-    "MS_MPH": {"multiplier": 2.23694},
-    "MS_KNOTS": {"multiplier": 1.94384},
-    "KNOTS_KMH": {"multiplier": 1.852},
-    "KNOTS_MPH": {"multiplier": 1.15078},
-    "KNOTS_MS": {"multiplier": 0.514444}
+    "KMH": {"multiplier": 1},
+    "MPH": {"multiplier": 0.621371},
+    "MS": {"multiplier": 0.277778},
+    "KNOTS": {"multiplier": 0.539957}
 }

@@ -1,14 +1,6 @@
 {
-    "J_CAL": {"multiplier": 0.239006},
-    "J_KCAL": {"multiplier": 0.000239006},
-    "J_WH": {"multiplier": 0.000277778},
-    "CAL_J": {"multiplier": 4.184},
-    "CAL_KCAL": {"multiplier": 0.001},
-    "CAL_WH": {"multiplier": 0.00116222},
-    "KCAL_J": {"multiplier": 4184},
-    "KCAL_CAL": {"multiplier": 1000},
-    "KCAL_WH": {"multiplier": 1.16222},
-    "WH_J": {"multiplier": 3600},
-    "WH_CAL": {"multiplier": 860.421},
-    "WH_KCAL": {"multiplier": 0.860421}
+    "J": {"multiplier": 1},
+    "CAL": {"multiplier": 4.184},
+    "KCAL": {"multiplier": 4184},
+    "WH": {"multiplier": 3600}
 }
