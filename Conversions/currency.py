@@ -1,9 +1,9 @@
-import tkinter as tk
-import requests
-import json
 import os
 from datetime import datetime
-from utils.utils import validate_number, clear_window, main_menu
+import json
+import requests
+import tkinter as tk
+from utils.utils import clear_window, main_menu, validate_number
 
 URL_API = "https://api.exchangerate-api.com/v4/latest/USD"
 FILE_NAME = "exchange_rates.json"

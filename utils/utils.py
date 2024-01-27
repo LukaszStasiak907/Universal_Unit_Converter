@@ -1,5 +1,5 @@
-import tkinter as tk
 import json
+import tkinter as tk
 
 
 def validate_number(input_str, window, back_function):

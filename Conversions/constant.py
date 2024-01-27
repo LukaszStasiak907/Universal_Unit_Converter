@@ -1,7 +1,7 @@
-import tkinter as tk
 import os
 import json
-from utils.utils import validate_number, clear_window, main_menu, create_dropdown_menu
+import tkinter as tk
+from utils.utils import clear_window, create_dropdown_menu, main_menu, validate_number
 
 
 def get_conversion_types():
@@ -33,7 +33,8 @@ def choose_conversion(window):
     conversion_types = get_conversion_types()
     conversion_type_var = create_dropdown_menu(window, "Select the conversion type:", conversion_types, 0, 1)
 
-    submit_button = tk.Button(window, text="Select", command=lambda: conversion_screen(window, conversion_type_var.get()))
+    submit_button = tk.Button(window,
+                              text="Select", command=lambda: conversion_screen(window, conversion_type_var.get()))
     submit_button.grid(row=2, column=0, sticky="ew")
     back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
     back_button.grid(row=3, column=0, sticky="ew")
@@ -102,7 +103,7 @@ def perform_conversion(window, value_str, source_unit, target_unit, conversion_t
 
     outcome = calculate(value, source_unit, target_unit, conversion_type)
     if outcome is not None:
-        result_label = tk.Label(window, text=f"{value} {source_unit} = {outcome:.2f} {target_unit}")
+        result_label = tk.Label(window, text=f"{value} {source_unit} = {outcome:.3f} {target_unit}")
         result_label.grid(row=0, column=0, sticky="ew")
     else:
         error_label = tk.Label(window, text="Conversion failed. Check your units.")

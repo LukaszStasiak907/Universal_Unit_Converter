@@ -1,7 +1,7 @@
+import tkinter as tk
 import Conversions.constant as constant
 import Conversions.currency as currency
-from utils import utils
-import tkinter as tk
+from utils.utils import add_new_unit, clear_window
 
 
 def main_menu(window):
@@ -13,7 +13,7 @@ def main_menu(window):
        Parameters:
        window (tk.Tk): The tkinter window where the main menu will be displayed.
     """
-    utils.clear_window(window)
+    clear_window(window)
     window.grid_rowconfigure(0, weight=1)
     window.grid_columnconfigure(0, weight=1)
 
@@ -27,7 +27,7 @@ def main_menu(window):
               text="Currency Conversion",
               command=lambda: currency.currency_conversion(window)).grid(row=2, column=0, sticky="nsew")
     tk.Button(window,
-              text="Add New Unit", command=lambda: utils.add_new_unit(window)).grid(row=3, column=0, sticky="nsew")
+              text="Add New Unit", command=lambda: add_new_unit(window)).grid(row=3, column=0, sticky="nsew")
     tk.Button(window, text="Exit", command=window.quit).grid(row=4, column=0, sticky="nsew")
 
 
