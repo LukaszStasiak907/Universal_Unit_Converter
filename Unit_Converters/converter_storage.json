@@ -1,22 +1,7 @@
 {
-    "B_KB": {"multiplier": 0.001},
-    "B_MB": {"multiplier": 0.000001},
-    "B_GB": {"multiplier": 0.000000001},
-    "B_TB": {"multiplier": 0.000000000001},
-    "KB_B": {"multiplier": 1000},
-    "KB_MB": {"multiplier": 0.001},
-    "KB_GB": {"multiplier": 0.000001},
-    "KB_TB": {"multiplier": 0.000000001},
-    "MB_B": {"multiplier": 1000000},
-    "MB_KB": {"multiplier": 1000},
-    "MB_GB": {"multiplier": 0.001},
-    "MB_TB": {"multiplier": 0.000001},
-    "GB_B": {"multiplier": 1000000000},
-    "GB_KB": {"multiplier": 1000000},
-    "GB_MB": {"multiplier": 1000},
-    "GB_TB": {"multiplier": 0.001},
-    "TB_B": {"multiplier": 1000000000000},
-    "TB_KB": {"multiplier": 1000000000},
-    "TB_MB": {"multiplier": 1000000},
-    "TB_GB": {"multiplier": 1000}
+    "B": {"multiplier": 1},
+    "KB": {"multiplier": 1000},
+    "MB": {"multiplier": 1000000},
+    "GB": {"multiplier": 1000000000},
+    "TB": {"multiplier": 1000000000000}
 }

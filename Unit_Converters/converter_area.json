@@ -1,22 +1,7 @@
 {
-    "M2_KM2": {"multiplier": 1e-6},
-    "M2_ACRE": {"multiplier": 0.000247105},
-    "M2_HA": {"multiplier": 0.0001},
-    "M2_FT2": {"multiplier": 10.7639},
-    "KM2_M2": {"multiplier": 1e6},
-    "KM2_ACRE": {"multiplier": 247.105},
-    "KM2_HA": {"multiplier": 100},
-    "KM2_FT2": {"multiplier": 10763910.4},
-    "ACRE_M2": {"multiplier": 4046.86},
-    "ACRE_KM2": {"multiplier": 0.00404686},
-    "ACRE_HA": {"multiplier": 0.404686},
-    "ACRE_FT2": {"multiplier": 43560},
-    "HA_M2": {"multiplier": 10000},
-    "HA_KM2": {"multiplier": 0.01},
-    "HA_ACRE": {"multiplier": 2.47105},
-    "HA_FT2": {"multiplier": 107639},
-    "FT2_M2": {"multiplier": 0.092903},
-    "FT2_KM2": {"multiplier": 9.2903e-8},
-    "FT2_ACRE": {"multiplier": 0.000022957},
-    "FT2_HA": {"multiplier": 0.0000092903}
+    "M2": {"multiplier": 1},
+    "KM2": {"multiplier": 1000000},
+    "ACRE": {"multiplier": 4046.86},
+    "HA": {"multiplier": 10000},
+    "FT2": {"multiplier": 0.092903}
 }

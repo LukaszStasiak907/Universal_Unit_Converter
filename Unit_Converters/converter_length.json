@@ -1,7 +1,10 @@
 {
     "M": {"multiplier": 1},
-    "KM": {"multiplier": 0.001},
-    "CM": {"multiplier": 100},
-    "MM": {"multiplier": 1000}
+    "KM": {"multiplier": 1000},
+    "CM": {"multiplier": 0.01},
+    "MM": {"multiplier": 0.001},
+    "MI": {"multiplier": 1609.34},
+    "YD": {"multiplier": 0.9144},
+    "FT": {"multiplier": 0.3048},
+    "IN": {"multiplier": 0.0254}
 }
-

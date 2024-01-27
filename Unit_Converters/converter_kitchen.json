@@ -1,14 +1,6 @@
 {
-    "TEASPOON_TABLESPOON": {"multiplier": 0.333333},
-    "TEASPOON_CUP": {"multiplier": 0.0208333},
-    "TEASPOON_FLOZ": {"multiplier": 0.166667},
-    "TABLESPOON_TEASPOON": {"multiplier": 3},
-    "TABLESPOON_CUP": {"multiplier": 0.0625},
-    "TABLESPOON_FLOZ": {"multiplier": 0.5},
-    "CUP_TEASPOON": {"multiplier": 48},
-    "CUP_TABLESPOON": {"multiplier": 16},
-    "CUP_FLOZ": {"multiplier": 8},
-    "FLOZ_TEASPOON": {"multiplier": 6},
-    "FLOZ_TABLESPOON": {"multiplier": 2},
-    "FLOZ_CUP": {"multiplier": 0.125}
+    "TEASPOON": {"multiplier": 1},
+    "TABLESPOON": {"multiplier": 3},
+    "CUP": {"multiplier": 48},
+    "FLOZ": {"multiplier": 6}
 }

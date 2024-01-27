@@ -1,7 +1,6 @@
 from utils import utils
 import json
 
-
 def calculate(value, source_unit, target_unit, conversion_type):
     conversion_factors = utils.load_conversion_factors(conversion_type)
     source_unit = source_unit.upper()
@@ -30,26 +29,16 @@ def calculate(value, source_unit, target_unit, conversion_type):
                 print(f"No conversion rate for: K to {target_unit}")
                 return None
     else:
-        # Dla innych typów konwersji (np. długość)
-        # Konwersja na jednostkę bazową
-        if source_unit in conversion_factors:
-            value /= conversion_factors[source_unit]["multiplier"]
-        else:
-            print(f"No conversion rate from {source_unit} to base unit.")
-            return None
+        # Dla innych typów konwersji (np. długość, ciężar)
+        # Przeliczanie na jednostkę bazową, jeśli to nie jednostka bazowa
+        if source_unit != 'KG' and source_unit in conversion_factors:
+            value *= conversion_factors[source_unit]["multiplier"]
 
-        # Konwersja z jednostki bazowej na docelową
-        if target_unit in conversion_factors:
-            value *= conversion_factors[target_unit]["multiplier"]
-        else:
-            print(f"No conversion rate from base unit to {target_unit}.")
-            return None
+        # Przeliczanie z jednostki bazowej na docelową
+        if target_unit != 'KG' and target_unit in conversion_factors:
+            value /= conversion_factors[target_unit]["multiplier"]
 
     return value
-
-
-
-
 
 def choose_conversion():
     conversion_type = input("Enter the conversion type (e.g. 'length', 'temperature'): ").lower()
@@ -63,13 +52,14 @@ def choose_conversion():
         return
 
     if conversion_type == "temperature":
-        # Wyświetl tylko symbole jednostek dla temperatury
         display_units = {"C", "K", "F"}
     else:
-        # Dla innych konwersji, wyświetl dostępne jednostki
-        display_units = set(unit.split("_")[0] for unit in units)
+        # Wyświetl wszystkie dostępne jednostki
+        display_units = set()
+        for key in units:
+            display_units.update(key.split("_"))
 
-    print("Available units:", ", ".join(display_units))
+    print("Available units:", ", ".join(sorted(display_units)))
     source_unit = input("Enter source unit: ").upper()
     target_unit = input("Enter target unit: ").upper()
 
