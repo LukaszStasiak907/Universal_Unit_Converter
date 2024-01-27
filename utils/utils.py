@@ -1,13 +1,11 @@
+import tkinter as tk
 import json
-
 
 def validate_number(input_str):
     try:
         return float(input_str)
     except ValueError:
-        print("This is not a valid number.")
         return None
-
 
 def load_conversion_factors(conversion_type):
     json_file = f'Unit_Converters/converter_{conversion_type}.json'
@@ -15,40 +13,60 @@ def load_conversion_factors(conversion_type):
         conversion_factors = json.load(file)
     return conversion_factors
 
+def add_new_unit(window):
+    clear_window(window)
+    tk.Label(window, text="Enter the name of the new unit (e.g., 'My Unit'):").pack()
+    source_unit_entry = tk.Entry(window)
+    source_unit_entry.pack()
 
-def add_new_unit():
+    tk.Label(window, text="Enter the target unit this corresponds to (e.g., 'meter'):").pack()
+    target_unit_entry = tk.Entry(window)
+    target_unit_entry.pack()
+
+    tk.Label(window, text="Enter how many target units make one source unit:").pack()
+    multiplier_entry = tk.Entry(window)
+    multiplier_entry.pack()
+
+    add_button = tk.Button(window, text="Add Unit", command=lambda: perform_add_new_unit(window, source_unit_entry.get(), target_unit_entry.get(), multiplier_entry.get()))
+    add_button.pack()
+
+    back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
+    back_button.pack()
+
+def perform_add_new_unit(window, source_unit, target_unit, multiplier_str):
+    multiplier = validate_number(multiplier_str)
+    if multiplier is None or multiplier == 0:
+        tk.Label(window, text="Invalid multiplier. The new unit was not added.").pack()
+        return
+
     converter_custom = 'Unit_Converters/converter_custom.json'
     try:
         with open(converter_custom, 'r') as file:
-            try:
-                custom_units = json.load(file)
-                if not isinstance(custom_units, dict):  # Sprawdza, czy załadowany JSON to słownik
-                    print("Invalid content in custom_units.json. Resetting file to an empty dictionary.")
-                    custom_units = {}
-            except json.JSONDecodeError:
-                print("Empty or invalid JSON in custom_units.json. Creating a new dictionary.")
-                custom_units = {}
-    except FileNotFoundError:
-        print(f"{converter_custom} file not found. Creating a new file.")
+            custom_units = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
         custom_units = {}
 
-    source_unit = input("Enter the name of the new unit (e.g., 'My Unit'): ").upper()
-    target_unit = input("Enter the target unit this corresponds to (e.g., 'meter or whatever you want e.g. My 2nd unit'): ").upper()
-    multiplier = validate_number(input(f"Enter how many {target_unit}s make one {source_unit}: "))
-
-    if multiplier is None or multiplier == 0:
-        print("Invalid multiplier. The new unit was not added.")
-        return
-
-    # Dodaje konwersję z jednostki źródłowej na docelową
-    forward_key = f"{source_unit}_{target_unit}"
+    forward_key = f"{source_unit.upper()}_{target_unit.upper()}"
     custom_units[forward_key] = {"multiplier": multiplier}
 
-    # Dodaje odwrotną konwersję z jednostki docelowej na źródłową
-    backward_key = f"{target_unit}_{source_unit}"
+    backward_key = f"{target_unit.upper()}_{source_unit.upper()}"
     custom_units[backward_key] = {"multiplier": 1 / multiplier}
 
     with open(converter_custom, 'w') as file:
         json.dump(custom_units, file, indent=4)
 
-    print(f"Units {source_unit} <=> {target_unit} have been added with multipliers {multiplier} and {1/multiplier} respectively.")
+    tk.Label(window, text=f"Units {source_unit.upper()} <=> {target_unit.upper()} have been added.").pack()
+    new_unit_button = tk.Button(window, text="Add Another Unit", command=lambda: add_new_unit(window))
+    new_unit_button.pack()
+
+    back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
+    back_button.pack()
+
+def clear_window(window):
+    for widget in window.winfo_children():
+        widget.destroy()
+
+def main_menu(window):
+    clear_window(window)
+    import main  # Import inside the function to avoid circular dependency
+    main.main_menu(window)

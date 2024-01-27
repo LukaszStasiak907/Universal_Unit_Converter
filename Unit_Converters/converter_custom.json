@@ -10,5 +10,17 @@
     },
     "M_GABRIEL": {
         "multiplier": 0.3333333333333333
+    },
+    "GUCIO2_PIES": {
+        "multiplier": 4.0
+    },
+    "PIES_GUCIO2": {
+        "multiplier": 0.25
+    },
+    "TURBO_NORMAL": {
+        "multiplier": 2.0
+    },
+    "NORMAL_TURBO": {
+        "multiplier": 0.5
     }
 }
