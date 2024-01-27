@@ -5,6 +5,11 @@ from utils.utils import validate_number, clear_window, main_menu, create_dropdow
 
 
 def get_conversion_types():
+    """Retrieves a list of available conversion types from the 'Unit_Converters' directory.
+
+    Returns:
+    list: A list of strings representing the different types of conversions available.
+    """
     directory = "Unit_Converters"
     conversion_files = os.listdir(directory)
     conversion_types = [file.replace("converter_", "").replace(".json", "") for file in conversion_files if
@@ -13,6 +18,13 @@ def get_conversion_types():
 
 
 def choose_conversion(window):
+    """Sets up the GUI for choosing a conversion type.
+
+    Parameters:
+    window (tk.Tk): The tkinter window where the GUI components will be added.
+
+    This function allows the user to select a conversion type from a dropdown menu and proceed to the conversion screen.
+    """
     clear_window(window)
     window.grid_rowconfigure(0, weight=1)
     window.grid_rowconfigure(1, weight=1)
@@ -26,9 +38,17 @@ def choose_conversion(window):
     back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
     back_button.grid(row=3, column=0, sticky="ew")
 
+
 def conversion_screen(window, conversion_type):
+    """Sets up the GUI for performing a unit conversion of a specified type.
+
+    Parameters:
+    window (tk.Tk): The tkinter window where the GUI components will be added.
+    conversion_type (str): The type of conversion to perform.
+
+    This function displays options for source and target units and an entry field for the value to be converted.
+    """
     clear_window(window)
-    # Konfiguracja wagi wierszy i kolumn dla responsywności
     window.grid_rowconfigure(1, weight=1)
     window.grid_columnconfigure(0, weight=1)
 
@@ -44,7 +64,6 @@ def conversion_screen(window, conversion_type):
     for unit_pair in units_data.keys():
         units.update(unit_pair.split("_"))
 
-    # Tworzenie rozwijanych menu z odpowiednim numerem wiersza
     source_unit_var = create_dropdown_menu(window, "Select source unit:", list(units), 2, 3)
     target_unit_var = create_dropdown_menu(window, "Select target unit:", list(units), 4, 5)
 
@@ -60,8 +79,19 @@ def conversion_screen(window, conversion_type):
 
 
 def perform_conversion(window, value_str, source_unit, target_unit, conversion_type):
+    """
+    Performs the unit conversion and displays the result.
+
+    Parameters:
+    window (tk.Tk): The tkinter window where the results will be displayed.
+    value_str (str): The string representation of the value to be converted.
+    source_unit (str): The unit of the input value.
+    target_unit (str): The unit into which the value is to be converted.
+    conversion_type (str): The type of conversion to perform.
+
+    This function validates the input value, performs the conversion, and displays the result or an error message.
+    """
     clear_window(window)
-    # Konfiguracja wagi wierszy i kolumn dla responsywności
     for i in range(4):
         window.grid_rowconfigure(i, weight=1)
         window.grid_columnconfigure(0, weight=1)
@@ -84,8 +114,20 @@ def perform_conversion(window, value_str, source_unit, target_unit, conversion_t
     main_menu_button.grid(row=2, column=0, sticky="ew")
 
 
-
 def calculate(value, source_unit, target_unit, conversion_type):
+    """Calculates the converted value based on the specified units and conversion type.
+
+    Parameters:
+    value (float): The value to be converted.
+    source_unit (str): The unit of the input value.
+    target_unit (str): The unit into which the value is to be converted.
+    conversion_type (str): The type of conversion to perform.
+
+    Returns:
+    float: The converted value.
+
+    This function handles both predefined and custom conversion factors.
+    """
     conversion_factors = load_conversion_factors(conversion_type)
     custom_conversion_factors = load_conversion_factors("custom")
     source_unit = source_unit.upper()
@@ -116,15 +158,23 @@ def calculate(value, source_unit, target_unit, conversion_type):
                 print(f"No conversion rate for: K to {target_unit}")
                 return None
     else:
-        if source_unit != 'KG' and source_unit in conversion_factors:
+        if source_unit in conversion_factors:
             value *= conversion_factors[source_unit]["multiplier"]
-        if target_unit != 'KG' and target_unit in conversion_factors:
+        if target_unit in conversion_factors:
             value /= conversion_factors[target_unit]["multiplier"]
 
     return value
 
 
 def load_conversion_factors(conversion_type):
+    """Loads conversion factors from a JSON file based on the specified conversion type.
+
+    Parameters:
+    conversion_type (str): The type of conversion (e.g., 'length', 'weight') for which the factors are required.
+
+    Returns:
+    dict: A dictionary containing the conversion factors for the specified type.
+    """
     json_file = f'Unit_Converters/converter_{conversion_type}.json'
     with open(json_file, 'r') as file:
         conversion_factors = json.load(file)
