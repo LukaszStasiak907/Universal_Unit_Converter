@@ -22,5 +22,23 @@
     },
     "NORMAL_TURBO": {
         "multiplier": 0.5
+    },
+    "TURBO2_TURBO": {
+        "multiplier": 2.0
+    },
+    "TURBO_TURBO2": {
+        "multiplier": 0.5
+    },
+    "UNIT3_UNIT5": {
+        "multiplier": 2.0
+    },
+    "UNIT5_UNIT3": {
+        "multiplier": 0.5
+    },
+    "UNIT30_UNIT3": {
+        "multiplier": 2.0
+    },
+    "UNIT3_UNIT30": {
+        "multiplier": 0.5
     }
 }

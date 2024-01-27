@@ -1,10 +1,12 @@
 import tkinter as tk
 import json
 
-def validate_number(input_str):
+def validate_number(input_str, window, back_function):
     try:
         return float(input_str)
     except ValueError:
+        tk.Label(window, text="This is not a valid number.").pack()
+        tk.Button(window, text="Back", command=back_function).pack()
         return None
 
 def load_conversion_factors(conversion_type):
@@ -33,10 +35,10 @@ def add_new_unit(window):
     back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
     back_button.pack()
 
+
 def perform_add_new_unit(window, source_unit, target_unit, multiplier_str):
-    multiplier = validate_number(multiplier_str)
+    multiplier = validate_number(multiplier_str, window, lambda: add_new_unit(window))
     if multiplier is None or multiplier == 0:
-        tk.Label(window, text="Invalid multiplier. The new unit was not added.").pack()
         return
 
     converter_custom = 'Unit_Converters/converter_custom.json'
@@ -62,9 +64,19 @@ def perform_add_new_unit(window, source_unit, target_unit, multiplier_str):
     back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
     back_button.pack()
 
+
 def clear_window(window):
     for widget in window.winfo_children():
         widget.destroy()
+
+
+def create_dropdown_menu(window, label_text, options):
+    tk.Label(window, text=label_text).pack()
+    var = tk.StringVar(window)
+    var.set(options[0])  # default value
+    menu = tk.OptionMenu(window, var, *options)
+    menu.pack()
+    return var
 
 def main_menu(window):
     clear_window(window)

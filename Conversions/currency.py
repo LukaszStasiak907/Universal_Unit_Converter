@@ -3,36 +3,33 @@ import requests
 import json
 import os
 from datetime import datetime
-from utils import utils
+from utils.utils import validate_number, clear_window, main_menu, create_dropdown_menu
 
 URL_API = "https://api.exchangerate-api.com/v4/latest/USD"
 FILE_NAME = "exchange_rates.json"
 
 
 def currency_conversion(window):
-    utils.clear_window(window)
+    clear_window(window)
     rates = fetch_currencies(URL_API, FILE_NAME)
 
     if rates is None:
         tk.Label(window, text="Unable to fetch new data and no local data available.").pack()
         return
 
-    tk.Label(window, text="Enter your source currency (e.g. USD):").pack()
-    source_currency_entry = tk.Entry(window)
-    source_currency_entry.pack()
+    currencies = list(rates['rates'].keys())
 
-    tk.Label(window, text="Enter the target currency (e.g. EUR):").pack()
-    target_currency_entry = tk.Entry(window)
-    target_currency_entry.pack()
+    source_currency_var = create_dropdown_menu(window, "Select your source currency:", currencies)
+    target_currency_var = create_dropdown_menu(window, "Select the target currency:", currencies)
 
     tk.Label(window, text="Enter the amount to be converted:").pack()
     amount_entry = tk.Entry(window)
     amount_entry.pack()
 
-    convert_button = tk.Button(window, text="Convert", command=lambda: perform_currency_conversion(window, rates,
-                                                                                                   source_currency_entry.get().upper(),
-                                                                                                   target_currency_entry.get().upper(),
-                                                                                                   amount_entry.get()))
+    convert_button = tk.Button(window, text="Convert",
+                               command=lambda: perform_currency_conversion(window, rates, source_currency_var.get(),
+                                                                           target_currency_var.get(),
+                                                                           amount_entry.get()))
     convert_button.pack()
 
     back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
@@ -67,11 +64,9 @@ def fetch_currencies(url_api, file_name):
 
 
 def perform_currency_conversion(window, rates, source_currency, target_currency, amount_str):
-    utils.clear_window(window)
-    try:
-        amount = float(amount_str)
-    except ValueError:
-        tk.Label(window, text="This is not a valid number.").pack()
+    clear_window(window)
+    amount = validate_number(amount_str, window, lambda: currency_conversion(window))
+    if amount is None:
         return
 
     if source_currency in rates['rates'] and target_currency in rates['rates']:
@@ -85,5 +80,5 @@ def perform_currency_conversion(window, rates, source_currency, target_currency,
     new_conversion_button = tk.Button(window, text="New Conversion", command=lambda: currency_conversion(window))
     new_conversion_button.pack()
 
-    back_button = tk.Button(window, text="Back to Main Menu", command=lambda: utils.main_menu(window))
+    back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
     back_button.pack()

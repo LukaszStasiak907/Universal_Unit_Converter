@@ -1,10 +1,75 @@
 import tkinter as tk
-from utils import utils
+import os
 import json
+from utils.utils import validate_number, clear_window, main_menu, create_dropdown_menu
+
+
+def get_conversion_types():
+    directory = "Unit_Converters"
+    conversion_files = os.listdir(directory)
+    conversion_types = [file.replace("converter_", "").replace(".json", "") for file in conversion_files if
+                        file.startswith("converter_") and file.endswith(".json")]
+    return conversion_types
+
+
+def choose_conversion(window):
+    clear_window(window)
+
+    conversion_types = get_conversion_types()
+    conversion_type_var = create_dropdown_menu(window, "Select the conversion type:", conversion_types)
+
+    tk.Button(window, text="Submit", command=lambda: conversion_screen(window, conversion_type_var.get())).pack()
+    tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window)).pack()
+
+
+def conversion_screen(window, conversion_type):
+    clear_window(window)
+
+    json_file = f'Unit_Converters/converter_{conversion_type}.json'
+    try:
+        with open(json_file, 'r') as file:
+            units_data = json.load(file)
+    except FileNotFoundError:
+        tk.Label(window, text=f"No conversion file found for '{conversion_type}'.").pack()
+        return
+
+    units = set()
+    for unit_pair in units_data.keys():
+        units.update(unit_pair.split("_"))
+
+    source_unit_var = create_dropdown_menu(window, "Select source unit:", list(units))
+    target_unit_var = create_dropdown_menu(window, "Select target unit:", list(units))
+
+    tk.Label(window, text="Enter the value to be converted:").pack()
+    value_entry = tk.Entry(window)
+    value_entry.pack()
+
+    convert_button = tk.Button(window, text="Convert",
+                               command=lambda: perform_conversion(window, value_entry.get(), source_unit_var.get(),
+                                                                  target_unit_var.get(), conversion_type))
+    convert_button.pack()
+    tk.Button(window, text="Back", command=lambda: choose_conversion(window)).pack()
+
+
+def perform_conversion(window, value_str, source_unit, target_unit, conversion_type):
+    clear_window(window)
+    value = validate_number(value_str, window, lambda: conversion_screen(window, conversion_type))
+    if value is None:
+        return
+
+    outcome = calculate(value, source_unit, target_unit, conversion_type)
+    if outcome is not None:
+        tk.Label(window, text=f"{value} {source_unit} to {outcome:.2f} {target_unit}").pack()
+    else:
+        tk.Label(window, text="Conversion failed. Check your units.").pack()
+
+    tk.Button(window, text="New Conversion", command=lambda: choose_conversion(window)).pack()
+    tk.Button(window, text="Main Menu", command=lambda: main_menu(window)).pack()
+
 
 def calculate(value, source_unit, target_unit, conversion_type):
-    conversion_factors = utils.load_conversion_factors(conversion_type)
-    custom_conversion_factors = utils.load_conversion_factors("custom")
+    conversion_factors = load_conversion_factors(conversion_type)
+    custom_conversion_factors = load_conversion_factors("custom")
     source_unit = source_unit.upper()
     target_unit = target_unit.upper()
 
@@ -41,75 +106,8 @@ def calculate(value, source_unit, target_unit, conversion_type):
     return value
 
 
-def choose_conversion(window):
-    clear_window(window)
-
-    tk.Label(window, text="Enter the conversion type (e.g. 'length', 'temperature'):").pack()
-    conversion_type_entry = tk.Entry(window)
-    conversion_type_entry.pack()
-
-    tk.Button(window, text="Submit",
-              command=lambda: conversion_screen(window, conversion_type_entry.get().lower())).pack()
-    tk.Button(window, text="Back to Main Menu", command=lambda: utils.main_menu(window)).pack()
-
-
-def conversion_screen(window, conversion_type):
-    clear_window(window)
-
+def load_conversion_factors(conversion_type):
     json_file = f'Unit_Converters/converter_{conversion_type}.json'
-
-    try:
-        with open(json_file, 'r') as file:
-            units = json.load(file).keys()
-    except FileNotFoundError:
-        tk.Label(window, text=f"No conversion file found for '{conversion_type}'.").pack()
-        return
-
-    if conversion_type == "temperature":
-        display_units = {"C", "K", "F"}
-    else:
-        display_units = set()
-        for key in units:
-            display_units.update(key.split("_"))
-
-    tk.Label(window, text="Available units: " + ", ".join(sorted(display_units))).pack()
-
-    tk.Label(window, text="Enter source unit:").pack()
-    source_unit_entry = tk.Entry(window)
-    source_unit_entry.pack()
-
-    tk.Label(window, text="Enter target unit:").pack()
-    target_unit_entry = tk.Entry(window)
-    target_unit_entry.pack()
-
-    tk.Label(window, text="Enter the value to be converted:").pack()
-    value_entry = tk.Entry(window)
-    value_entry.pack()
-
-    tk.Button(window, text="Convert",
-              command=lambda: perform_conversion(window, value_entry.get(), source_unit_entry.get(),
-                                                 target_unit_entry.get(), conversion_type)).pack()
-    tk.Button(window, text="Back", command=lambda: choose_conversion(window)).pack()
-
-
-def perform_conversion(window, value, source_unit, target_unit, conversion_type):
-    clear_window(window)
-    try:
-        value = float(value)
-    except ValueError:
-        tk.Label(window, text="This is not a valid number.").pack()
-        return
-
-    outcome = calculate(value, source_unit, target_unit, conversion_type)
-    if outcome is not None:
-        tk.Label(window, text=f"{value} {source_unit} to {outcome:.2f} {target_unit}").pack()
-    else:
-        tk.Label(window, text="Conversion failed. Check your units.").pack()
-
-    tk.Button(window, text="New Conversion", command=lambda: choose_conversion(window)).pack()
-    tk.Button(window, text="Main Menu", command=lambda: utils.main_menu(window)).pack()
-
-
-def clear_window(window):
-    for widget in window.winfo_children():
-        widget.destroy()
+    with open(json_file, 'r') as file:
+        conversion_factors = json.load(file)
+    return conversion_factors

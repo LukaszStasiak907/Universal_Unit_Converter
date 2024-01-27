@@ -5,15 +5,12 @@ import tkinter as tk
 
 
 def main_menu(window):
-    clear_window(window)
+    utils.clear_window(window)
     tk.Button(window, text="Constant Conversion", command=lambda: constant.choose_conversion(window)).pack()
     tk.Button(window, text="Currency Conversion", command=lambda: currency.currency_conversion(window)).pack()
     tk.Button(window, text="Add New Unit", command=lambda: utils.add_new_unit(window)).pack()
     tk.Button(window, text="Exit", command=window.quit).pack()
 
-def clear_window(window):
-    for widget in window.winfo_children():
-        widget.destroy()
 
 if __name__ == "__main__":
     root = tk.Tk()
