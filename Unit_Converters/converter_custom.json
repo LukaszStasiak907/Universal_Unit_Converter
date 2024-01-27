@@ -40,5 +40,11 @@
     },
     "UNIT3_UNIT30": {
         "multiplier": 0.5
+    },
+    "UNIT12_UNIT3": {
+        "multiplier": 3.0
+    },
+    "UNIT3_UNIT12": {
+        "multiplier": 0.3333333333333333
     }
 }
