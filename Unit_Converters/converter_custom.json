@@ -46,5 +46,23 @@
     },
     "UNIT3_UNIT12": {
         "multiplier": 0.3333333333333333
+    },
+    "HELLO1_HELLO2E": {
+        "multiplier": 20.0
+    },
+    "HELLO2E_HELLO1": {
+        "multiplier": 0.05
+    },
+    "UNIT3_UNIT8": {
+        "multiplier": 2.0
+    },
+    "UNIT8_UNIT3": {
+        "multiplier": 0.5
+    },
+    "EREWR_REWRWER": {
+        "multiplier": 21.0
+    },
+    "REWRWER_EREWR": {
+        "multiplier": 0.047619047619047616
     }
 }

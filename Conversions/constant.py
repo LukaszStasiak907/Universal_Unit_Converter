@@ -15,16 +15,16 @@ def get_conversion_types():
 def choose_conversion(window):
     clear_window(window)
     window.grid_rowconfigure(0, weight=1)
+    window.grid_rowconfigure(1, weight=1)
     window.grid_columnconfigure(0, weight=1)
 
     conversion_types = get_conversion_types()
-    conversion_type_var = create_dropdown_menu(window, "Select the conversion type:", conversion_types, 0)
+    conversion_type_var = create_dropdown_menu(window, "Select the conversion type:", conversion_types, 0, 1)
 
-    submit_button = tk.Button(window, text="Submit", command=lambda: conversion_screen(window, conversion_type_var.get()))
+    submit_button = tk.Button(window, text="Select", command=lambda: conversion_screen(window, conversion_type_var.get()))
     submit_button.grid(row=2, column=0, sticky="ew")
     back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
     back_button.grid(row=3, column=0, sticky="ew")
-
 
 def conversion_screen(window, conversion_type):
     clear_window(window)
@@ -45,8 +45,8 @@ def conversion_screen(window, conversion_type):
         units.update(unit_pair.split("_"))
 
     # Tworzenie rozwijanych menu z odpowiednim numerem wiersza
-    source_unit_var = create_dropdown_menu(window, "Select source unit:", list(units), 2)
-    target_unit_var = create_dropdown_menu(window, "Select target unit:", list(units), 4)
+    source_unit_var = create_dropdown_menu(window, "Select source unit:", list(units), 2, 3)
+    target_unit_var = create_dropdown_menu(window, "Select target unit:", list(units), 4, 5)
 
     tk.Label(window, text="Enter the value to be converted:").grid(row=6, column=0, sticky="w")
     value_entry = tk.Entry(window)
@@ -61,18 +61,28 @@ def conversion_screen(window, conversion_type):
 
 def perform_conversion(window, value_str, source_unit, target_unit, conversion_type):
     clear_window(window)
+    # Konfiguracja wagi wierszy i kolumn dla responsywności
+    for i in range(4):
+        window.grid_rowconfigure(i, weight=1)
+        window.grid_columnconfigure(0, weight=1)
+
     value = validate_number(value_str, window, lambda: conversion_screen(window, conversion_type))
     if value is None:
         return
 
     outcome = calculate(value, source_unit, target_unit, conversion_type)
     if outcome is not None:
-        tk.Label(window, text=f"{value} {source_unit} to {outcome:.2f} {target_unit}").pack()
+        result_label = tk.Label(window, text=f"{value} {source_unit} = {outcome:.2f} {target_unit}")
+        result_label.grid(row=0, column=0, sticky="ew")
     else:
-        tk.Label(window, text="Conversion failed. Check your units.").pack()
+        error_label = tk.Label(window, text="Conversion failed. Check your units.")
+        error_label.grid(row=0, column=0, sticky="ew")
 
-    tk.Button(window, text="New Conversion", command=lambda: choose_conversion(window)).pack()
-    tk.Button(window, text="Main Menu", command=lambda: main_menu(window)).pack()
+    new_conversion_button = tk.Button(window, text="New Conversion", command=lambda: choose_conversion(window))
+    new_conversion_button.grid(row=1, column=0, sticky="ew")
+    main_menu_button = tk.Button(window, text="Main Menu", command=lambda: main_menu(window))
+    main_menu_button.grid(row=2, column=0, sticky="ew")
+
 
 
 def calculate(value, source_unit, target_unit, conversion_type):
