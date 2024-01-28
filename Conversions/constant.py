@@ -97,9 +97,17 @@ def perform_conversion(window, value_str, source_unit, target_unit, conversion_t
         window.grid_rowconfigure(i, weight=1)
         window.grid_columnconfigure(0, weight=1)
 
-    value = validate_number(value_str, window, lambda: conversion_screen(window, conversion_type))
-    if value is None:
-        return
+    if conversion_type != "temperature":
+        value = validate_number(value_str, window, lambda: conversion_screen(window, conversion_type))
+        if value is None:
+            return
+    else:
+        try:
+            value = float(value_str)
+        except ValueError:
+            tk.Label(window, text="This is not a valid number.").grid(row=0, column=0, sticky="nsew")
+            tk.Button(window, text="Back", command=lambda: conversion_screen(window, conversion_type)).grid(row=1, column=0, sticky="ew")
+            return
 
     outcome = calculate(value, source_unit, target_unit, conversion_type)
     if outcome is not None:
@@ -113,6 +121,7 @@ def perform_conversion(window, value_str, source_unit, target_unit, conversion_t
     new_conversion_button.grid(row=1, column=0, sticky="ew")
     main_menu_button = tk.Button(window, text="Main Menu", command=lambda: main_menu(window))
     main_menu_button.grid(row=2, column=0, sticky="ew")
+
 
 
 def calculate(value, source_unit, target_unit, conversion_type):
