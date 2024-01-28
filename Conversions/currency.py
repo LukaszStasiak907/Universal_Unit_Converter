@@ -10,8 +10,7 @@ FILE_NAME = "exchange_rates.json"
 
 
 def currency_conversion(window):
-    """
-    Sets up the GUI for currency conversion.
+    """Sets up the GUI for currency conversion.
 
     This function clears the current window, fetches the latest currency rates, and sets up the interface
     for currency conversion, including dropdown menus for selecting source and target currencies and
@@ -99,8 +98,7 @@ def fetch_currencies(url_api, file_name):
 
 
 def perform_currency_conversion(window, rates, source_currency, target_currency, amount_str):
-    """
-    Performs the currency conversion and displays the result.
+    """Performs the currency conversion and displays the result.
 
     This function takes the input amount, source and target currencies, calculates the conversion
     based on the current rates, and displays the result. It also handles the case of an invalid input amount

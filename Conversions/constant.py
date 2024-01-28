@@ -1,7 +1,8 @@
 import os
 import json
 import tkinter as tk
-from Converter_Utils.utils import clear_window, create_dropdown_menu, main_menu, validate_number
+from Converter_Utils.utils import clear_window, create_dropdown_menu, load_conversion_factors,\
+                                   main_menu, validate_number
 
 
 def get_conversion_types():
@@ -80,8 +81,7 @@ def conversion_screen(window, conversion_type):
 
 
 def perform_conversion(window, value_str, source_unit, target_unit, conversion_type):
-    """
-    Performs the unit conversion and displays the result.
+    """Performs the unit conversion and displays the result.
 
     Parameters:
     window (tk.Tk): The tkinter window where the results will be displayed.
@@ -165,18 +165,3 @@ def calculate(value, source_unit, target_unit, conversion_type):
             value /= conversion_factors[target_unit]["multiplier"]
 
     return value
-
-
-def load_conversion_factors(conversion_type):
-    """Loads conversion factors from a JSON file based on the specified conversion type.
-
-    Parameters:
-    conversion_type (str): The type of conversion (e.g., 'length', 'weight') for which the factors are required.
-
-    Returns:
-    dict: A dictionary containing the conversion factors for the specified type.
-    """
-    json_file = f'Unit_Converters/converter_{conversion_type}.json'
-    with open(json_file, 'r') as file:
-        conversion_factors = json.load(file)
-    return conversion_factors

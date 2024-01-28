@@ -136,8 +136,7 @@ def perform_add_new_unit(window, source_unit, target_unit, multiplier_str):
 
 
 def clear_window(window):
-    """
-    Clears all widgets from the given tkinter window.
+    """Clears all widgets from the given tkinter window.
 
     Parameters:
     window (tk.Tk): The tkinter window to be cleared.
