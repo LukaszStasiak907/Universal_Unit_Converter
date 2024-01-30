@@ -1,19 +1,153 @@
-from utils import utils
+import os
 import json
+import tkinter as tk
+from Converter_Utils.utils import clear_window, create_dropdown_menu, load_conversion_factors,\
+                                   main_menu, validate_number
+
+
+def get_conversion_types():
+    """Retrieves a list of available conversion types from the 'Unit_Converters' directory.
+
+    Returns:
+    list: A list of strings representing the different types of conversions available.
+    """
+    directory = "Unit_Converters"
+    conversion_files = os.listdir(directory)
+    conversion_types = [file.replace("converter_", "").replace(".json", "") for file in conversion_files if
+                        file.startswith("converter_") and file.endswith(".json")]
+    return conversion_types
+
+
+def choose_conversion(window):
+    """Sets up the GUI for choosing a conversion type.
+
+    Parameters:
+    window (tk.Tk): The tkinter window where the GUI components will be added.
+
+    This function allows the user to select a conversion type from a dropdown menu and proceed to the conversion screen.
+    """
+    clear_window(window)
+    window.grid_rowconfigure(0, weight=1)
+    window.grid_rowconfigure(1, weight=1)
+    window.grid_columnconfigure(0, weight=1)
+
+    conversion_types = get_conversion_types()
+    conversion_type_var = create_dropdown_menu(window, "Select the conversion type:", conversion_types, 0, 1)
+
+    submit_button = tk.Button(window,
+                              text="Select", command=lambda: conversion_screen(window, conversion_type_var.get()))
+    submit_button.grid(row=2, column=0, sticky="ew")
+    back_button = tk.Button(window, text="Back to Main Menu", command=lambda: main_menu(window))
+    back_button.grid(row=3, column=0, sticky="ew")
+
+
+def conversion_screen(window, conversion_type):
+    """Sets up the GUI for performing a unit conversion of a specified type.
+
+    Parameters:
+    window (tk.Tk): The tkinter window where the GUI components will be added.
+    conversion_type (str): The type of conversion to perform.
+
+    This function displays options for source and target units and an entry field for the value to be converted.
+    """
+    clear_window(window)
+    window.grid_rowconfigure(1, weight=1)
+    window.grid_columnconfigure(0, weight=1)
+
+    json_file = f'Unit_Converters/converter_{conversion_type}.json'
+    try:
+        with open(json_file, 'r') as file:
+            units_data = json.load(file)
+    except FileNotFoundError:
+        tk.Label(window, text=f"No conversion file found for '{conversion_type}'.").grid(row=0, column=0, sticky="nsew")
+        return
+
+    units = set()
+    for unit_pair in units_data.keys():
+        units.update(unit_pair.split("_"))
+
+    source_unit_var = create_dropdown_menu(window, "Select source unit:", list(units), 2, 3)
+    target_unit_var = create_dropdown_menu(window, "Select target unit:", list(units), 4, 5)
+
+    tk.Label(window, text="Enter the value to be converted:").grid(row=6, column=0, sticky="nsew")
+    value_entry = tk.Entry(window)
+    value_entry.grid(row=7, column=0, sticky="ew")
+
+    convert_button = tk.Button(window, text="Convert",
+                               command=lambda: perform_conversion(window, value_entry.get(), source_unit_var.get(),
+                                                                  target_unit_var.get(), conversion_type))
+    convert_button.grid(row=8, column=0, sticky="ew")
+    tk.Button(window, text="Back", command=lambda: choose_conversion(window)).grid(row=9, column=0, sticky="ew")
+
+
+def perform_conversion(window, value_str, source_unit, target_unit, conversion_type):
+    """Performs the unit conversion and displays the result.
+
+    Parameters:
+    window (tk.Tk): The tkinter window where the results will be displayed.
+    value_str (str): The string representation of the value to be converted.
+    source_unit (str): The unit of the input value.
+    target_unit (str): The unit into which the value is to be converted.
+    conversion_type (str): The type of conversion to perform.
+
+    This function validates the input value, performs the conversion, and displays the result or an error message.
+    """
+    clear_window(window)
+    for i in range(4):
+        window.grid_rowconfigure(i, weight=1)
+        window.grid_columnconfigure(0, weight=1)
+
+    if conversion_type != "temperature":
+        value = validate_number(value_str, window, lambda: conversion_screen(window, conversion_type))
+        if value is None:
+            return
+    else:
+        try:
+            value = float(value_str)
+        except ValueError:
+            tk.Label(window, text="This is not a valid number.").grid(row=0, column=0, sticky="nsew")
+            tk.Button(window, text="Back", command=lambda: conversion_screen(window, conversion_type)).grid(row=1, column=0, sticky="ew")
+            return
+
+    outcome = calculate(value, source_unit, target_unit, conversion_type)
+    if outcome is not None:
+        result_label = tk.Label(window, text=f"{value} {source_unit} = {outcome:.3f} {target_unit}")
+        result_label.grid(row=0, column=0, sticky="ew")
+    else:
+        error_label = tk.Label(window, text="Conversion failed. Check your units.")
+        error_label.grid(row=0, column=0, sticky="ew")
+
+    new_conversion_button = tk.Button(window, text="New Conversion", command=lambda: choose_conversion(window))
+    new_conversion_button.grid(row=1, column=0, sticky="ew")
+    main_menu_button = tk.Button(window, text="Main Menu", command=lambda: main_menu(window))
+    main_menu_button.grid(row=2, column=0, sticky="ew")
+
+
 
 def calculate(value, source_unit, target_unit, conversion_type):
-    conversion_factors = utils.load_conversion_factors(conversion_type)
-    custom_conversion_factors = utils.load_conversion_factors("custom")  # Załaduj niestandardowe współczynniki konwersji
+    """Calculates the converted value based on the specified units and conversion type.
+
+    Parameters:
+    value (float): The value to be converted.
+    source_unit (str): The unit of the input value.
+    target_unit (str): The unit into which the value is to be converted.
+    conversion_type (str): The type of conversion to perform.
+
+    Returns:
+    float: The converted value.
+
+    This function handles both predefined and custom conversion factors.
+    """
+    conversion_factors = load_conversion_factors(conversion_type)
+    custom_conversion_factors = load_conversion_factors("custom")
     source_unit = source_unit.upper()
     target_unit = target_unit.upper()
 
     custom_key = f"{source_unit}_{target_unit}"
 
     if custom_key in custom_conversion_factors:
-        # Użyj niestandardowej konwersji, jeśli dostępna
         value *= custom_conversion_factors[custom_key]["multiplier"]
     elif conversion_type == "temperature":
-        # Konwersja na Kelwiny, jeśli potrzebna
         if source_unit != "K":
             key = f"{source_unit}_K"
             if key in conversion_factors:
@@ -25,7 +159,6 @@ def calculate(value, source_unit, target_unit, conversion_type):
                 print(f"No conversion rate for: {source_unit} to K")
                 return None
 
-        # Konwersja z Kelwinów na jednostkę docelową
         if target_unit != "K":
             key = f"K_{target_unit}"
             if key in conversion_factors:
@@ -35,50 +168,9 @@ def calculate(value, source_unit, target_unit, conversion_type):
                 print(f"No conversion rate for: K to {target_unit}")
                 return None
     else:
-        # Dla innych typów konwersji (np. długość, ciężar)
-        # Przeliczanie na jednostkę bazową, jeśli to nie jednostka bazowa
-        if source_unit != 'KG' and source_unit in conversion_factors:
+        if source_unit in conversion_factors:
             value *= conversion_factors[source_unit]["multiplier"]
-
-        # Przeliczanie z jednostki bazowej na docelową
-        if target_unit != 'KG' and target_unit in conversion_factors:
+        if target_unit in conversion_factors:
             value /= conversion_factors[target_unit]["multiplier"]
 
     return value
-
-def choose_conversion():
-    conversion_type = input("Enter the conversion type (e.g. 'length', 'temperature'): ").lower()
-    json_file = f'Unit_Converters/converter_{conversion_type}.json'
-
-    try:
-        with open(json_file, 'r') as file:
-            units = json.load(file).keys()
-    except FileNotFoundError:
-        print(f"No conversion file found for '{conversion_type}'.")
-        return
-
-    if conversion_type == "temperature":
-        display_units = {"C", "K", "F"}
-    else:
-        # Wyświetl wszystkie dostępne jednostki
-        display_units = set()
-        for key in units:
-            display_units.update(key.split("_"))
-
-    print("Available units:", ", ".join(sorted(display_units)))
-    source_unit = input("Enter source unit: ").upper()
-    target_unit = input("Enter target unit: ").upper()
-
-    value = utils.validate_number(input("Enter the value to be converted: "))
-
-    if source_unit == target_unit:
-        print(f"{value} {source_unit} to {value:.2f} {target_unit}")
-        return
-
-    if value is None:
-        return
-
-    outcome = calculate(value, source_unit, target_unit, conversion_type)
-    if outcome is not None:
-        print(f"{value} {source_unit} to {outcome:.2f} {target_unit}")
-

@@ -1,14 +1,26 @@
 {
-    "GUCIO_PIES": {
+    "UNIT1_UNIT2": {
         "multiplier": 2.0
     },
-    "PIES_GUCIO": {
+    "UNIT2_UNIT1": {
         "multiplier": 0.5
     },
-    "GABRIEL_M": {
-        "multiplier": 3.0
+    "MY_UNIT_METER": {
+        "multiplier": 2.0
     },
-    "M_GABRIEL": {
-        "multiplier": 0.3333333333333333
+    "METER_MY_UNIT": {
+        "multiplier": 0.5
+    },
+    "UNIT400_UNIT500": {
+        "multiplier": 2.0
+    },
+    "UNIT500_UNIT400": {
+        "multiplier": 0.5
+    },
+    "NOWY1_NOWY2": {
+        "multiplier": 2.0
+    },
+    "NOWY2_NOWY1": {
+        "multiplier": 0.5
     }
 }
